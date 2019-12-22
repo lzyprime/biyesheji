@@ -33,9 +33,8 @@ class _AuthWidgetState extends State<AuthWidget> {
             ),
             body: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 30, bottom: 20),
-                  child: ToggleButtons(
+                Spacer(),
+                  ToggleButtons(
                     children: [
                       Text(S.of(context).login),
                       Text(S.of(context).register)
@@ -48,10 +47,10 @@ class _AuthWidgetState extends State<AuthWidget> {
                         curve: Curves.fastLinearToSlowEaseIn,
                       );
                     },
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                ),
                 Expanded(
+                  flex: 5,
                   child: PageView(
                     controller: pageController,
                     children: <Widget>[LoginWidget(), RegisterWidget()],
@@ -61,7 +60,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                       current = index;
                     }),
                   ),
-                )
+                ),
               ],
             )));
   }

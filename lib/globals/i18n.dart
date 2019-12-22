@@ -46,7 +46,7 @@ class S implements WidgetsLocalizations {
 
   String get female => "女";
 
-  String get edit => "编辑";
+  String get editInfo => "编辑信息";
 
   String get userInfo => "用户信息";
 
