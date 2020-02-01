@@ -1,22 +1,21 @@
 package com.lzyprime.routes.user
 
-import com.lzyprime.daos.User
-import com.lzyprime.tables.Users
+import com.lzyprime.db.tables.User
+import com.lzyprime.db.tables.Users
+import com.lzyprime.response.*
 import io.ktor.locations.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
+@KtorExperimentalLocationsAPI
 @Location("/login")
 data class Login(val username: String, val password: String) {
-    operator fun invoke(): Map<String, Any> {
-        val user = transaction {
-            User.find { (Users.username eq username) }.firstOrNull()
+    operator fun invoke() = transaction {
+        when (val user = User.find { (Users.username eq username) }.firstOrNull()) {
+            null -> UserError.NoUser
+            else -> if (user.password != password)
+                UserError.WrongPassword
+            else
+                SuccessData(user.id.value)
         }
-
-        return when {
-            user == null -> mapOf("result" to false, "info" to "用户不存在")
-            user.password == password -> mapOf("result" to true, "info" to "登录成功")
-            else -> mapOf("result" to false, "info" to "密码错误")
-        }
-
     }
 }
