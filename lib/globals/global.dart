@@ -1,14 +1,16 @@
+import 'package:client/views/user_widgets/edit_user_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/views/home_widgets/home_widget.dart';
-import 'package:client/views/auth_widget.dart';
+import 'package:client/views/auth_widgets/auth_widget.dart';
 
 class Global {
   /// route
   final routes = {
     HomeWidget.routeName: (_) => HomeWidget(),
-    AuthWidget.routeName: (_) => AuthWidget(),
+    AuthWidget.routeName: AuthWidget.routeBuilder,
+    EditUserInfoWidget.routeName: (_) => EditUserInfoWidget(),
   };
 
   /// theme
@@ -17,6 +19,12 @@ class Global {
         primarySwatch: Colors.purple,
         primaryColor: Colors.purple,
         accentColor: Colors.pink,
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.purple,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          textTheme: ButtonTextTheme.primary,
+        ),
       );
 
   /// save
@@ -30,9 +38,7 @@ class Global {
 class ShareKey {
   static const theme = 'theme';
 
-  static const userId = 'user_id';
-}
+  static const uid = 'uid';
 
-class GlobalColor {
-  static final goldColor = Color.fromRGBO(255, 215, 0, 1);
+  static const userInfo = "userInfo";
 }

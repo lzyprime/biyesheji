@@ -34,7 +34,7 @@ class S implements WidgetsLocalizations {
 
   String get password => "密码";
 
-  String get enterPassword => "确认密码";
+  String get rePassword => "确认密码";
 
   String get email => "邮箱";
 
@@ -46,15 +46,15 @@ class S implements WidgetsLocalizations {
 
   String get female => "女";
 
-  String get editInfo => "编辑信息";
-
-  String get userInfo => "用户信息";
-
-  String get notNull => "不能为空";
+  String get notNull => "不能为空!";
 
   String get inconsistent => "不一致";
 
+  String get reloading => "重新加载";
+
   String get netError => "网络请求失败";
+
+  String get logout => "退出登录";
 }
 
 class $zhCN extends S {

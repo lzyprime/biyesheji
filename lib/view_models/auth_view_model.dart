@@ -1,149 +1,103 @@
-import 'package:client/views/home_widgets/home_widget.dart';
+import 'package:client/globals/global.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:client/globals/i18n.dart';
+
+import 'package:client/datas/user_data.dart';
 import 'package:client/models/user_model.dart';
 
-enum AuthStateType { normal, loading, done }
-
 class AuthViewModel with ChangeNotifier {
-  final _model = UserModel();
+  BuildContext context;
 
+  AuthViewModel([this.context]);
+
+  final _model = UserModel();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final enterPasswordController = TextEditingController();
+  final rePasswordController = TextEditingController();
   final emailController = TextEditingController();
+  EnumSex sex = EnumSex.obscure;
 
-  int gender = 0;
-
-  String get username => usernameController.text;
-
-  String get password => passwordController.text;
-
-  String get enterPassword => enterPasswordController.text;
-
-  String get email => emailController.text;
-
-  String usernameError;
-  String passwordError;
-  String enterPasswordError;
-  String emailError;
-  String loginError;
-  String registerError;
-
-  AuthStateType loginState = AuthStateType.normal;
-  AuthStateType registerState = AuthStateType.normal;
-
-  _resetError() {
-    usernameError = null;
-    passwordError = null;
-    enterPasswordError = null;
-    emailError = null;
-    loginError = null;
-    registerError = null;
-  }
-
-  bool _verifyUserName() {
-    if (username?.isEmpty ?? true) {
-      usernameError = S.current.notNull;
-      return false;
-    }
-    return true;
-  }
-
-  bool _verifyPassword() {
-    if (password?.isEmpty ?? true) {
-      passwordError = S.current.notNull;
-      return false;
-    }
-    return true;
-  }
-
-  bool _verifyEnterPassWord() {
-    if ((password?.isEmpty ?? true) || (enterPassword?.isEmpty ?? true) || (password != enterPassword)) {
-      enterPasswordError = '${S.current.password}${S.current.inconsistent}';
-      return false;
-    }
-    return true;
-  }
-
-  bool _verifyEmail() {
-    if (email?.isEmpty ?? true) {
-      emailError = S.current.notNull;
-      return false;
-    }
-    return true;
-  }
-
-  AuthViewModel() {
-    usernameController.addListener(() {
-      _resetError();
-      notifyListeners();
-    });
-    passwordController.addListener(() {
-      _resetError();
-      _verifyUserName();
-      notifyListeners();
-    });
-    enterPasswordController.addListener(() {
-      _resetError();
-      _verifyUserName();
-      _verifyPassword();
-      notifyListeners();
-    });
-    emailController.addListener(() {
-      _resetError();
-      _verifyUserName();
-      _verifyPassword();
-      _verifyEnterPassWord();
-      notifyListeners();
-    });
-  }
-
-  setGender(int v) {
-    gender = v;
-    _resetError();
-    _verifyUserName();
-    _verifyPassword();
-    _verifyEnterPassWord();
-    _verifyEmail();
+  setSex(v) {
+    sex = v;
     notifyListeners();
   }
 
-  login(BuildContext context) {
-    bool verify = _verifyUserName() && _verifyPassword();
+  bool isRegister = false;
+
+  changeRegister() {
+    isRegister = !isRegister;
     notifyListeners();
-    if (!verify) return;
-    _model.login(username, password).doOnListen(() {
-      loginState = AuthStateType.loading;
+  }
+
+  bool showPassword = false;
+
+  changeShowPassword() {
+    showPassword = !showPassword;
+    notifyListeners();
+  }
+
+  String errorText;
+  bool loading = false;
+
+  login() {
+    errorText = null;
+    if (loading) return;
+
+    final username = usernameController.text;
+    final password = passwordController.text;
+    if (username.isEmpty || password.isEmpty) {
+      errorText = S.of(context).notNull;
       notifyListeners();
-    }).listen((res) {
-      if (res.result) {
-        loginState = AuthStateType.done;
+      return;
+    }
+    loading = true;
+    notifyListeners();
+    _model.login(username, password).listen((res) {
+      loading = false;
+      if (res.result != 0) {
+        errorText = res.msg;
         notifyListeners();
-        Future.delayed(Duration(seconds: 1), () => Navigator.of(context).pushReplacementNamed(HomeWidget.routeName));
       } else {
-        loginError = res.msg;
-        loginState = AuthStateType.normal;
-        notifyListeners();
+        Global.share.setInt(ShareKey.uid, res.data);
+        Navigator.of(context).pop(res.data);
       }
     });
   }
 
-  void register(context) {
-    _model.register(username, password, email, gender).doOnListen(() {
-      registerState = AuthStateType.loading;
+  register() {
+    errorText = null;
+    if (loading) return;
+
+    final username = usernameController.text;
+    final password = passwordController.text;
+    final rePassword = rePasswordController.text;
+    final email = emailController.text;
+
+    if (username.isEmpty ||
+        password.isEmpty ||
+        rePassword.isEmpty ||
+        email.isEmpty) {
+      errorText = S.of(context).notNull;
       notifyListeners();
-    }).listen((res) {
-      if (res.result) {
-        registerState = AuthStateType.done;
+      return;
+    }
+
+    if(password != rePassword){
+      errorText = '${S.of(context).password}${S.of(context).inconsistent}';
+      notifyListeners();
+      return;
+    }
+
+    loading = true;
+    notifyListeners();
+    _model.register(username, password, email, sex.index).listen((res){
+      loading = false;
+      if(res.result != 0){
+        errorText = res.msg;
         notifyListeners();
-        Future.delayed(Duration(seconds: 1), () => Navigator.of(context).pushReplacementNamed(HomeWidget.routeName));
-      } else {
-        registerError = res.msg;
-        registerState = AuthStateType.normal;
-        notifyListeners();
+      }else {
+        Global.share.setInt(ShareKey.uid, res.data);
+        Navigator.of(context).pop(res.data);
       }
     });
   }

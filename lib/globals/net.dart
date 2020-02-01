@@ -1,8 +1,29 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 
-// server address
-class Net {
-  static const baseUrl = 'http://172.20.88.50:8080';
+import 'package:client/globals/i18n.dart';
+import 'package:client/datas/result_data.dart';
 
-  final dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 3000, baseUrl: baseUrl));
+class Net {
+  factory Net() => _instance;
+  static final _instance = Net._();
+  Dio dio = Dio();
+
+  Net._() {
+    dio.options.baseUrl = "http://192.168.1.105:8080";
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
+  }
+
+  Stream<ResultData> get(String url, [Map<String, dynamic> query]) =>
+      dio.get(url, queryParameters: query ?? {}).then((res) {
+        print(res.data.toString());
+        if (res.statusCode == HttpStatus.ok)
+          return ResultData.fromJson(res.data);
+        return ResultData(result: res.statusCode, msg: res.statusMessage);
+      }, onError: (e) {
+        print((e as DioError).response.toString());
+        return ResultData(
+            result: HttpStatus.badRequest, msg: S.current.netError);
+      }).asStream();
 }
