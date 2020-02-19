@@ -1,6 +1,6 @@
 package com.lzyprime.routes.user
 
-import com.lzyprime.db.tables.User
+import com.lzyprime.db.dao.User
 import com.lzyprime.db.tables.Users
 import com.lzyprime.response.SuccessData
 import com.lzyprime.response.UserError
@@ -30,7 +30,7 @@ data class Register(
                         email = this@Register.email
                         sex = this@Register.sex
                     }
-                    SuccessData(user.id.value)
+                    SuccessData(user.data)
                 } else
                     UserError.Existed
             }
