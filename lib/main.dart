@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/globals/i18n.dart';
-import 'package:client/globals/global.dart';
-import 'package:client/views/home_widgets/home_widget.dart';
+import 'package:client/globals/route.dart';
+import 'package:client/globals/localizations.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget with Global {
-  @override
-  Widget build(BuildContext context) {
-    Global.init();
-    return MaterialApp(
-      title: 'flutter client',
-      theme: theme,
-      routes: routes,
+void main() => runApp(MaterialApp(
+      theme: _theme,
+      onGenerateRoute: onGenerateRoute,
       localizationsDelegates: S.localizationsDelegates,
       supportedLocales: S.supportedLocales,
-      initialRoute: HomeWidget.routeName,
-    );
-  }
-}
+      debugShowCheckedModeBanner: false,
+      initialRoute: initialRoute,
+    ));
+
+final _theme = ThemeData(
+  primarySwatch: Colors.purple,
+  primaryColor: Colors.purple,
+  accentColor: Colors.pink,
+  buttonTheme: ButtonThemeData(
+    buttonColor: Colors.purple,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    textTheme: ButtonTextTheme.primary,
+  ),
+);

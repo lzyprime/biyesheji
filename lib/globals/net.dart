@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 
-import 'package:client/globals/i18n.dart';
+import 'package:client/globals/localizations.dart';
 import 'package:client/datas/result_data.dart';
 
 class Net {
@@ -10,7 +10,7 @@ class Net {
   Dio dio = Dio();
 
   Net._() {
-    dio.options.baseUrl = "http://192.168.1.105:8080";
+    dio.options.baseUrl = "http://192.168.2.233:8080";
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
   }

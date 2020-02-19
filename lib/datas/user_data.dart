@@ -1,24 +1,28 @@
+import 'dart:convert';
+
 enum EnumSex { male, female, obscure }
 
 class UserData {
-  static final Map<int, UserData> _cache = {};
-
   int id;
   String username;
   String email;
   EnumSex sex;
+  String avatar;
 
-  UserData({this.id, this.username, this.email, this.sex}) {
-    _cache[id] = this;
-  }
+  UserData({this.id, this.username, this.email, this.sex, this.avatar});
 
-  UserData.fromJson(json)
+  UserData.fromJson(Map<String, dynamic> json)
       : id = json["id"] ?? 0,
         username = json["username"] ?? "",
         email = json["email"] ?? "",
-        sex = EnumSex.values[json["sex"] ?? 2] {
-    _cache[id] = this;
-  }
+        sex = EnumSex.values[json["sex"] ?? 2],
+        avatar = json["avatar"];
 
-  factory UserData.fromCache(int uid) => _cache[uid] ?? UserData(id: 0);
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "username": username,
+        "email": email,
+        "sex": sex.index,
+        "avatar": avatar,
+      };
 }

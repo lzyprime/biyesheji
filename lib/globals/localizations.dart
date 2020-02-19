@@ -55,6 +55,28 @@ class S implements WidgetsLocalizations {
   String get netError => "网络请求失败";
 
   String get logout => "退出登录";
+
+  String get preview => "预览";
+
+  String get post => "文章";
+
+  String get postContent => "文章内容 (markdown)";
+
+  String get postTitle => "文章标题";
+
+  String get news => "最新动态";
+
+  String get author => "作者";
+
+  String get createTime => "创建于";
+
+  String get updateTime => "更新于";
+
+  String get favoritePost => "收藏文章";
+
+  String get attention => "关注用户";
+
+  String get follower => "粉丝";
 }
 
 class $zhCN extends S {
@@ -97,7 +119,9 @@ class _CustomLocalizationsDelegate extends LocalizationsDelegate<S> {
           return true;
         }
 
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry &&
+            (supportedLocale.countryCode == null ||
+                supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
