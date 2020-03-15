@@ -1,23 +1,14 @@
-import 'dart:convert';
-
-import 'package:client/datas/user_data.dart';
-import 'package:client/globals/keys.dart';
 import 'package:client/globals/net.dart';
 import 'package:client/datas/result_data.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel {
   static final _instance = UserModel._();
 
-  UserModel._() {
-    getUserInfo();
-  }
-
   factory UserModel() => _instance;
 
-  static const url = "/user";
+  UserModel._();
 
-  UserData userData;
+  static const url = "/user";
 
   /// 登录
   Stream<ResultData> login(String username, String password) =>
@@ -27,8 +18,8 @@ class UserModel {
       });
 
   /// 注册
-  Stream<ResultData> register(String username, String password, String email,
-      int sex) =>
+  Stream<ResultData> register(
+          String username, String password, String email, int sex) =>
       Net().get("$url/register", {
         "username": username,
         "password": password,
@@ -36,26 +27,42 @@ class UserModel {
         "sex": sex,
       });
 
-  /// 缓存用户信息
-  saveUserInfo(UserData userData) {
-    if (userData == null || userData.id == 0) return;
-    this.userData = userData;
-    SharedPreferences.getInstance()
-        .then((v) => v.setString(K.userInfo, json.encode(userData)));
-  }
+  Stream<ResultData> getUserInfo(int uid) =>
+      Net().get("$url/get_user_info", {"uid": uid});
 
-  getUserInfo() {
-    SharedPreferences.getInstance().then((v) =>
-    userData = v.containsKey(K.userInfo)
-        ? UserData.fromJson(json.decode(v.getString(K.userInfo)))
-        : null);
-  }
+  Stream<ResultData> posts(int uid) => Net().get("$url/posts", {"uid": uid});
 
-  /// 注销
-  logout() {
-    userData = null;
-    SharedPreferences.getInstance().then((v) {
-      v.remove(K.userInfo);
-    });
-  }
+  Stream<ResultData> favoritePosts(int uid) =>
+      Net().get("$url/favorite_posts", {"uid": uid});
+
+  Stream<ResultData> attentions(int uid) =>
+      Net().get("$url/attentions", {"uid": uid});
+
+  Stream<ResultData> followers(int uid) =>
+      Net().get("$url/followers", {"uid": uid});
+
+  Stream<ResultData> newUsername(int uid, String username) =>
+      Net().get("$url/new_username", {
+        "uid": uid,
+        "username": username,
+      });
+
+  Stream<ResultData> newAvatar(int uid, String avatarUrl) =>
+      Net().get("$url/new_avatar", {
+        "uid": uid,
+        "avatar": avatarUrl,
+      });
+
+  Stream<ResultData> newPassword(
+          int uid, String oldPassword, String newPassword) =>
+      Net().get("$url/new_password", {
+        "uid": uid,
+        "oldPassword": oldPassword,
+        "newPassword": newPassword,
+      });
+
+  Stream<ResultData> newSex(int uid, int sex) => Net().get("$url/new_sex", {
+        "uid": uid,
+        "sex": sex,
+      });
 }

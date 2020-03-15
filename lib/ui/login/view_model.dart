@@ -1,3 +1,4 @@
+import 'package:client/globals/cache.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -43,8 +44,8 @@ class LoginViewModel with ChangeNotifier {
       } else {
         final userData = UserData.fromJson(res.data);
         if (userData.id == 0) return;
-        _model.saveUserInfo(userData);
-        Navigator.of(context).pop(userData);
+        Cache.update(K.userInfo, userData);
+        Navigator.of(context).pop();
       }
     }).listen(null);
   }

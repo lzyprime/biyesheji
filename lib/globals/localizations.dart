@@ -77,6 +77,16 @@ class S implements WidgetsLocalizations {
   String get attention => "关注用户";
 
   String get follower => "粉丝";
+
+  String get oldPassword => "旧密码";
+
+  String get editUserInfo => "编辑用户信息";
+
+  String get language => "语言";
+
+  String get theme => "主题";
+
+  String get avatar => "头像";
 }
 
 class $zhCN extends S {

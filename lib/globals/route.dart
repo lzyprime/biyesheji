@@ -1,19 +1,23 @@
-import 'package:client/views/post_widgets/show_post_widget.dart';
+import 'package:client/ui/post/other_user/other_user_widget.dart';
+import 'package:client/ui/user/favorite_attention/favorite_attention_widget.dart';
+import 'package:client/ui/user/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'package:client/views/auth_widgets/login_widget.dart';
-import 'package:client/views/home_widgets/home_widget.dart';
-import 'package:client/views/post_widgets/edit_post_widget.dart';
-import 'package:client/views/post_widgets/preview_post_widget.dart';
-import 'package:client/views/home_widgets/user_widgets/edit_user_info_widget.dart';
+import 'package:client/ui/home_widget.dart';
+import 'package:client/ui/post/post_widget.dart';
+import 'package:client/ui/login/login_widget.dart';
+import 'package:client/ui/edit_post/edit_post_widget.dart';
+import 'package:client/ui/edit_post/preview_post/preview_post_widget.dart';
 
 class R {
   static const home = "/";
   static const login = "/login";
   static const editPost = "/edit_post";
-  static const editUerInfo = "/edit_user_info";
   static const previewPost = "/preview_post";
   static const post = "/post";
+  static const settings = "/settings";
+  static const otherUser = "/other_user";
+  static const favoriteAttention = "/favorite_attention";
 }
 
 final RouteFactory onGenerateRoute = (RouteSettings settings) {
@@ -28,14 +32,20 @@ final RouteFactory onGenerateRoute = (RouteSettings settings) {
     case R.editPost:
       widget = EditPostWidget(settings.arguments);
       break;
-    case R.editUerInfo:
-      widget = EditUserInfoWidget(settings.arguments);
-      break;
     case R.previewPost:
-      widget = PreviewPostWidget(settings.arguments);
+      widget = PreviewWidget(settings.arguments);
       break;
     case R.post:
-      widget = ShowPostWidget(settings.arguments);
+      widget = PostWidget(settings.arguments);
+      break;
+    case R.otherUser:
+      widget = OtherUserWidget(settings.arguments);
+      break;
+    case R.favoriteAttention:
+      widget = FavoriteAttentionWidget(settings.arguments);
+      break;
+    case R.settings:
+      widget = SettingsWidget();
       break;
   }
   return MaterialPageRoute(builder: (_) => widget, settings: settings);

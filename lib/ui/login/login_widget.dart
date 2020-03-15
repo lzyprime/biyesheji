@@ -1,12 +1,12 @@
-import 'package:client/globals/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import 'package:client/ui/login/view_model.dart';
 import 'package:client/globals/localizations.dart';
-import 'package:client/view_models/login_view_model.dart';
 
 class LoginWidget extends StatefulWidget {
+  final viewModel = LoginViewModel();
   @override
   createState() => _LoginWidgetState();
 }
@@ -15,8 +15,8 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool showPassword = false;
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (context) => LoginViewModel(),
+  Widget build(BuildContext context) => ChangeNotifierProvider.value(
+        value: widget.viewModel,
         child: Scaffold(
           appBar: AppBar(title: Text("${S.of(context).login}")),
           body: Padding(

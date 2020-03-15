@@ -1,16 +1,22 @@
+import 'package:client/globals/cache.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/globals/route.dart';
 import 'package:client/globals/localizations.dart';
 
-void main() => runApp(MaterialApp(
-      theme: _theme,
-      onGenerateRoute: onGenerateRoute,
-      localizationsDelegates: S.localizationsDelegates,
-      supportedLocales: S.supportedLocales,
-      debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
-    ));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Cache().loadCache().then(
+        (_) => runApp(MaterialApp(
+          theme: _theme,
+          onGenerateRoute: onGenerateRoute,
+          localizationsDelegates: S.localizationsDelegates,
+          supportedLocales: S.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          initialRoute: initialRoute,
+        )),
+      );
+}
 
 final _theme = ThemeData(
   primarySwatch: Colors.purple,
