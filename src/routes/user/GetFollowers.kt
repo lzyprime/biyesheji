@@ -8,12 +8,12 @@ import io.ktor.locations.Location
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @KtorExperimentalLocationsAPI
-@Location("/get_user_info")
-data class GetUserInfo(val uid: Int) {
+@Location("/followers")
+data class GetFollowers(val uid: Int) {
     operator fun invoke() = transaction {
         when (val user = User.findById(uid)) {
             null -> UserError.NotFoundUser
-            else -> SuccessData(data = user.data)
+            else -> SuccessData(data = user.follower.map { it.data })
         }
     }
 }

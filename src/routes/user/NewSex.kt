@@ -7,13 +7,17 @@ import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import org.jetbrains.exposed.sql.transactions.transaction
 
+
 @KtorExperimentalLocationsAPI
-@Location("/get_user_info")
-data class GetUserInfo(val uid: Int) {
+@Location("/new_sex")
+data class NewSex(val uid: Int, val sex: Int) {
     operator fun invoke() = transaction {
         when (val user = User.findById(uid)) {
             null -> UserError.NotFoundUser
-            else -> SuccessData(data = user.data)
+            else -> {
+                user.sex = sex
+                SuccessData()
+            }
         }
     }
 }

@@ -1,13 +1,11 @@
 package com.lzyprime
 
 import com.lzyprime.db.DB
+import com.lzyprime.routes.favorite.AttentionUser
 import com.lzyprime.routes.favorite.FavoritePost
 import com.lzyprime.routes.post.EditPost
 import com.lzyprime.routes.post.PostList
-import com.lzyprime.routes.routeManager
-import com.lzyprime.routes.user.GetUserInfo
-import com.lzyprime.routes.user.Login
-import com.lzyprime.routes.user.Register
+import com.lzyprime.routes.user.*
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -36,8 +34,17 @@ fun Application.module(testing: Boolean = false) {
             get<Register> { call.respond(it()) }
             get<GetUserInfo> { call.respond(it()) }
 
+            get<GetPosts> { call.respond(it()) }
+            get<GetFavoritePosts> { call.respond(it()) }
+            get<GetAttentions> { call.respond(it()) }
+            get<GetFollowers> { call.respond(it()) }
+
+            get<NewUsername> { call.respond(it()) }
+            get<NewSex> { call.respond(it()) }
+            get<NewAvatar> { call.respond(it()) }
+
             get {
-                call.respond("/user/* [login, register, get_user_info]")
+                call.respond("/user/* [login, register, get_user_info, posts, favorite_posts, attentions, followers]")
             }
         }
 
@@ -48,13 +55,14 @@ fun Application.module(testing: Boolean = false) {
             get { call.respond("/post/* [edit_post, post_list]") }
         }
 
-        route("/favorite") {
+        route("/favorite_attention") {
             get<FavoritePost> { call.respond(it()) }
-            get { call.respond("/favorite/* [post]") }
+            get<AttentionUser> { call.respond(it()) }
+            get { call.respond("/favorite_attention/* [post, user]") }
         }
 
         get {
-            call.respond("/* [user, post, favorite]")
+            call.respond("/* [user, post, favorite_attention]")
         }
     }
 }

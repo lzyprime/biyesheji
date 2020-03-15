@@ -15,8 +15,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 data class Register(
     val username: String,
     val password: String,
-    val email: String,
-    val sex: Int
+    val email: String
 ) {
     operator fun invoke() =
         if (username.isEmpty() || password.isEmpty() || email.isEmpty())
@@ -28,7 +27,6 @@ data class Register(
                         username = this@Register.username
                         password = this@Register.password
                         email = this@Register.email
-                        sex = this@Register.sex
                     }
                     SuccessData(user.data)
                 } else

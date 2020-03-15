@@ -1,5 +1,6 @@
 package com.lzyprime.db
 
+import com.lzyprime.db.tables.Attentions
 import com.lzyprime.db.tables.FavoritePosts
 import com.lzyprime.db.tables.Posts
 import com.lzyprime.db.tables.Users
@@ -20,7 +21,7 @@ object DB {
     @JvmStatic
     fun main(args: Array<String>) {
         transaction(invoke()) {
-            SchemaUtils.createMissingTablesAndColumns(Users, Posts, FavoritePosts)
+            SchemaUtils.createMissingTablesAndColumns(Users, Posts, FavoritePosts, Attentions)
         }
     }
 }

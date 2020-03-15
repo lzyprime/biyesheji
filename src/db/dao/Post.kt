@@ -19,6 +19,7 @@ class Post(id: EntityID<Int>) : IntEntity(id){
         "content" to content,
         "createTime" to createTime.toString("yyyy-MM-dd HH:mm"),
         "updateTime" to updateTime.toString("yyyy-MM-dd HH:mm"),
-        "user" to uid.data
+        "user" to uid.data,
+        "sort_value" to updateTime.millis
     )
 }

@@ -21,15 +21,16 @@ data class FavoritePost(val uid: Int, val pid: Int, val inquire: Boolean = false
                 FavoriteError.postBelongWithUser
             else when (val user = User.findById(uid)) {
                 null -> UserError.NotFoundUser
-                else -> {
-                    val isFavoritePost = user.favoritePosts.any { it == post }
-                    if (!inquire && isFavoritePost)
-                        user.favoritePosts =
-                            SizedCollection(user.favoritePosts.toMutableList().also { it.remove(post) })
-                    else if (!inquire && !isFavoritePost)
+                else -> when {
+                    inquire -> SuccessData(data = user.favoritePosts.any { it == post })
+                    user.favoritePosts.any { it == post } -> {
+                        user.favoritePosts = SizedCollection(user.favoritePosts.toMutableList().also { it.remove(post) })
+                        SuccessData(data = false)
+                    }
+                    else -> {
                         user.favoritePosts = SizedCollection(user.favoritePosts.toMutableList().also { it.add(post) })
-
-                    SuccessData(data = user.favoritePosts.any { it == post })
+                        SuccessData(data = true)
+                    }
                 }
             }
         }
