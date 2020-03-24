@@ -1,4 +1,4 @@
-package com.lzyprime.routes.user
+package com.lzyprime.routes.user.get_user_data
 
 import com.lzyprime.db.dao.Post
 import com.lzyprime.db.dao.User
@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 data class GetPosts(val uid: Int) {
     operator fun invoke() = transaction {
         val resultData = when (User.findById(uid)) {
-            null -> UserError.NotFoundUser
+            null -> UserError.notFoundUser
             else -> {
                 val posts = Post.find { Posts.uid eq uid }
                 if (posts.empty())

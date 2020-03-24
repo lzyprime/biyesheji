@@ -11,7 +11,7 @@ class Post(id: EntityID<Int>) : IntEntity(id){
     var content by Posts.content
     var createTime by Posts.createTime
     var updateTime by Posts.updateTime
-    var uid by User referencedOn Posts.uid
+    var user by User referencedOn Posts.uid
 
     val data get() = mapOf(
         "id" to id.value,
@@ -19,7 +19,7 @@ class Post(id: EntityID<Int>) : IntEntity(id){
         "content" to content,
         "createTime" to createTime.toString("yyyy-MM-dd HH:mm"),
         "updateTime" to updateTime.toString("yyyy-MM-dd HH:mm"),
-        "user" to uid.data,
+        "user" to user.data,
         "sort_value" to updateTime.millis
     )
 }

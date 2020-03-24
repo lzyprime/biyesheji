@@ -16,11 +16,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 data class FavoritePost(val uid: Int, val pid: Int, val inquire: Boolean = false) {
     operator fun invoke() = transaction {
         when (val post = Post.findById(pid)) {
-            null -> PostError.NotFoundPost
-            else -> if (post.uid.id.value == uid)
+            null -> PostError.notFoundPost
+            else -> if (post.user.id.value == uid)
                 FavoriteError.postBelongWithUser
             else when (val user = User.findById(uid)) {
-                null -> UserError.NotFoundUser
+                null -> UserError.notFoundUser
                 else -> when {
                     inquire -> SuccessData(data = user.favoritePosts.any { it == post })
                     user.favoritePosts.any { it == post } -> {

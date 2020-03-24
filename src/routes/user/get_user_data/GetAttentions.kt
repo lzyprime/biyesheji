@@ -1,8 +1,6 @@
-package com.lzyprime.routes.user
+package com.lzyprime.routes.user.get_user_data
 
-import com.lzyprime.db.dao.Post
 import com.lzyprime.db.dao.User
-import com.lzyprime.db.tables.Posts
 import com.lzyprime.response.SuccessData
 import com.lzyprime.response.UserError
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -10,12 +8,12 @@ import io.ktor.locations.Location
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @KtorExperimentalLocationsAPI
-@Location("/favorite_posts")
-data class GetFavoritePosts(val uid:Int) {
+@Location("/attentions")
+data class GetAttentions(val uid:Int){
     operator fun invoke() = transaction {
-        when (val user = User.findById(uid)) {
-            null -> UserError.NotFoundUser
-            else -> SuccessData(data = user.favoritePosts.map { it.data })
+        when(val user = User.findById(uid)){
+            null -> UserError.notFoundUser
+            else -> SuccessData(data = user.attention.map { it.data })
         }
     }
 }

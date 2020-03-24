@@ -1,4 +1,4 @@
-package com.lzyprime.routes.user
+package com.lzyprime.routes.user.get_user_data
 
 import com.lzyprime.db.dao.User
 import com.lzyprime.response.SuccessData
@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 data class GetFollowers(val uid: Int) {
     operator fun invoke() = transaction {
         when (val user = User.findById(uid)) {
-            null -> UserError.NotFoundUser
+            null -> UserError.notFoundUser
             else -> SuccessData(data = user.follower.map { it.data })
         }
     }

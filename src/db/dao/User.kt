@@ -1,9 +1,6 @@
 package com.lzyprime.db.dao
 
-import com.lzyprime.db.tables.Attentions
-import com.lzyprime.db.tables.FavoritePosts
-import com.lzyprime.db.tables.Posts
-import com.lzyprime.db.tables.Users
+import com.lzyprime.db.tables.*
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -17,6 +14,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     var email by Users.email
     var sex by Users.sex
     var avatar by Users.avatar
+    var authCode by Users.authCode
 
     var favoritePosts by Post via FavoritePosts
     var attention by User.via(Attentions.follower, Attentions.attention)
@@ -29,12 +27,15 @@ class User(id: EntityID<Int>) : IntEntity(id) {
             "email" to email,
             "sex" to sex,
             "avatar" to avatar,
-            "post_num" to transaction {
+            "postNum" to transaction {
                 Post.find { Posts.uid eq id }.count()
             },
-            "favorite_num" to favoritePosts.count(),
-            "attention_num" to attention.count(),
-            "follower_num" to follower.count()
+            "favoriteNum" to favoritePosts.count(),
+            "attentionNum" to attention.count(),
+            "followerNum" to follower.count(),
+            "commentNum" to transaction {
+                Comment.find { Comments.userId eq id }.count()
+            }
         )
 
 }

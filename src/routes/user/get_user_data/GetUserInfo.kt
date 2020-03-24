@@ -1,4 +1,4 @@
-package com.lzyprime.routes.user
+package com.lzyprime.routes.user.get_user_data
 
 import com.lzyprime.db.dao.User
 import com.lzyprime.response.SuccessData
@@ -7,17 +7,13 @@ import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
 @KtorExperimentalLocationsAPI
-@Location("/new_sex")
-data class NewSex(val uid: Int, val sex: Int) {
+@Location("/get_user_info")
+data class GetUserInfo(val uid: Int) {
     operator fun invoke() = transaction {
         when (val user = User.findById(uid)) {
-            null -> UserError.NotFoundUser
-            else -> {
-                user.sex = sex
-                SuccessData()
-            }
+            null -> UserError.notFoundUser
+            else -> SuccessData(data = user.data)
         }
     }
 }

@@ -13,11 +13,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 @Location("/user")
 data class AttentionUser(val uid: Int, val otherUid: Int, val inquire: Boolean = false) {
 
-    operator fun invoke() = if (uid == otherUid) FavoriteError.CannotAttentionSelf else transaction {
+    operator fun invoke() = if (uid == otherUid) FavoriteError.cannotAttentionSelf else transaction {
         val user = User.findById(uid)
         val other = User.findById(otherUid)
         if (user == null || other == null)
-            UserError.NotFoundUser
+            UserError.notFoundUser
         else if (inquire)
             SuccessData(data = user.attention.any { it == other })
         else when (user.attention.any { it == other }) {

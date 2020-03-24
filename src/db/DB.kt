@@ -1,11 +1,9 @@
 package com.lzyprime.db
 
-import com.lzyprime.db.tables.Attentions
-import com.lzyprime.db.tables.FavoritePosts
-import com.lzyprime.db.tables.Posts
-import com.lzyprime.db.tables.Users
+import com.lzyprime.db.tables.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DB {
@@ -21,7 +19,7 @@ object DB {
     @JvmStatic
     fun main(args: Array<String>) {
         transaction(invoke()) {
-            SchemaUtils.createMissingTablesAndColumns(Users, Posts, FavoritePosts, Attentions)
+            SchemaUtils.createMissingTablesAndColumns(Users, Posts, FavoritePosts, Attentions, Comments)
         }
     }
 }

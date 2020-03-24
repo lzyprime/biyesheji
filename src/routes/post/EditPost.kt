@@ -15,15 +15,18 @@ data class EditPost(
     val id: Int = 0,
     val title: String,
     val content: String,
-    val uid: Int
+    val uid: Int,
+    val auth: String
 ) {
     operator fun invoke() = when {
-        title.isEmpty() -> PostError.TitleNotNull
-        content.isEmpty() -> PostError.ContentNotNull
+        title.isEmpty() -> PostError.titleNotNull
+        content.isEmpty() -> PostError.contentNotNull
         else -> transaction {
             when (val user = User.findById(uid)) {
-                null -> UserError.NotFoundUser
-                else -> {
+                null -> UserError.notFoundUser
+                else -> if (user.authCode != auth)
+                    UserError.authFailed
+                else {
                     val now = DateTime.now()
                     val post = if (id == 0)
                         Post.new {
@@ -31,7 +34,7 @@ data class EditPost(
                             content = this@EditPost.content
                             createTime = now
                             updateTime = now
-                            uid = user
+                            this.user = user
                         }
                     else
                         Post.findById(id).also {
@@ -40,10 +43,10 @@ data class EditPost(
                             it?.content = this@EditPost.content
                         }
 
-                    if(post != null && post.uid.id.value != uid)
-                        PostError.PostUserError
+                    if (post != null && post.user.id.value != uid)
+                        PostError.postUserError
                     else if (post != null) SuccessData(post.data)
-                    else PostError.NotFoundPost
+                    else PostError.notFoundPost
                 }
             }
         }
