@@ -19,6 +19,7 @@ class S implements WidgetsLocalizations {
 
   static const supportedLocales = <Locale>[
     Locale("zh", "CN"),
+    Locale("en", "US"),
   ];
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
@@ -37,8 +38,6 @@ class S implements WidgetsLocalizations {
   String get rePassword => "确认密码";
 
   String get email => "邮箱";
-
-  String get phone => "手机";
 
   String get obscure => "保密";
 
@@ -78,8 +77,6 @@ class S implements WidgetsLocalizations {
 
   String get follower => "粉丝";
 
-  String get oldPassword => "旧密码";
-
   String get editUserInfo => "编辑用户信息";
 
   String get language => "语言";
@@ -87,10 +84,134 @@ class S implements WidgetsLocalizations {
   String get theme => "主题";
 
   String get avatar => "头像";
+
+  String get comment => "评论";
+
+  String get gender => "性别";
+
+  String get followSystem => "跟随系统";
+
+  String get darkTheme => "深色主题";
+
+  String get light => "亮色";
+
+  String get dark => "暗色";
 }
 
 class $zhCN extends S {
   const $zhCN();
+}
+
+class $enUS extends S {
+  const $enUS();
+
+  @override
+  String get attention => "attention";
+
+  @override
+  String get author => "author";
+
+  @override
+  String get avatar => "avatar";
+
+  @override
+  String get comment => "comment";
+
+  @override
+  String get createTime => "create time";
+
+  @override
+  String get editUserInfo => "edit userInfo";
+
+  @override
+  String get email => "email";
+
+  @override
+  String get favoritePost => "favorite post";
+
+  @override
+  String get female => "female";
+
+  @override
+  String get follower => "follower";
+
+  @override
+  String get gender => "gender";
+
+  @override
+  String get inconsistent => "inconsistent";
+
+  @override
+  String get language => "language";
+
+  @override
+  String get login => "login";
+
+  @override
+  String get logout => "logout";
+
+  @override
+  String get male => "male";
+
+  @override
+  String get netError => "Connection failed";
+
+  @override
+  String get news => "News";
+
+  @override
+  String get notNull => "Can not be empty";
+
+  @override
+  String get obscure => "invisible";
+
+  @override
+  String get password => "password";
+
+  @override
+  String get post => "post";
+
+  @override
+  String get postContent => "post content (markdown)";
+
+  @override
+  String get postTitle => "post title";
+
+  @override
+  String get preview => "preview";
+
+  @override
+  String get rePassword => "confirm password";
+
+  @override
+  String get register => "register";
+
+  @override
+  String get reloading => "reloading";
+
+  @override
+  TextDirection get textDirection => TextDirection.ltr;
+
+  @override
+  String get theme => "theme";
+
+  @override
+  String get updateTime => "update time";
+
+  @override
+  String get username => "username";
+
+  @override
+  String get followSystem => "follow system";
+
+  @override
+  String get darkTheme => "dark Theme";
+
+  @override
+  String get light => "light";
+
+  @override
+  String get dark => "dark";
 }
 
 class _CustomLocalizationsDelegate extends LocalizationsDelegate<S> {
@@ -102,6 +223,9 @@ class _CustomLocalizationsDelegate extends LocalizationsDelegate<S> {
       switch (locale.toLanguageTag()) {
         case "zh-CN":
           S.current = const $zhCN();
+          return SynchronousFuture<S>(S.current);
+        case "en-US":
+          S.current = const $enUS();
           return SynchronousFuture<S>(S.current);
         default:
           S.current = const $zhCN();

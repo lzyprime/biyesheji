@@ -21,6 +21,8 @@ class Net {
           return ResultData.fromJson(res.data);
         return ResultData(result: res.statusCode, msg: res.statusMessage);
       }, onError: (e) {
-        return ResultData(result: HttpStatus.badRequest, msg: S.current.netError);
+        return ResultData(
+            result: HttpStatus.badRequest, msg: S.current.netError);
       }).asStream();
+
 }

@@ -1,3 +1,4 @@
+import 'package:client/globals/cache.dart';
 import 'package:client/globals/net.dart';
 import 'package:client/datas/result_data.dart';
 
@@ -10,59 +11,68 @@ class UserModel {
 
   static const url = "/user";
 
+  String get get => "$url/get";
+
+  String get set => "$url/set";
+
+  String get auth => "$url/auth";
+
   /// 登录
   Stream<ResultData> login(String username, String password) =>
-      Net().get("$url/login", {
+      Net().get("$auth/login", {
         "username": username,
         "password": password,
       });
 
   /// 注册
-  Stream<ResultData> register(
-          String username, String password, String email, int sex) =>
-      Net().get("$url/register", {
+  Stream<ResultData> register(String username, String password, String email,
+          int sex, String avatar) =>
+      Net().get("$auth/register", {
         "username": username,
         "password": password,
         "email": email,
         "sex": sex,
+        "avatar": avatar ?? "",
       });
 
   Stream<ResultData> getUserInfo(int uid) =>
-      Net().get("$url/get_user_info", {"uid": uid});
+      Net().get("$get/get_user_info", {"uid": uid});
 
-  Stream<ResultData> posts(int uid) => Net().get("$url/posts", {"uid": uid});
+  Stream<ResultData> posts(int uid) => Net().get("$get/posts", {"uid": uid});
 
   Stream<ResultData> favoritePosts(int uid) =>
-      Net().get("$url/favorite_posts", {"uid": uid});
+      Net().get("$get/favorite_posts", {"uid": uid});
 
   Stream<ResultData> attentions(int uid) =>
-      Net().get("$url/attentions", {"uid": uid});
+      Net().get("$get/attentions", {"uid": uid});
 
   Stream<ResultData> followers(int uid) =>
-      Net().get("$url/followers", {"uid": uid});
+      Net().get("$get/followers", {"uid": uid});
 
-  Stream<ResultData> newUsername(int uid, String username) =>
-      Net().get("$url/new_username", {
-        "uid": uid,
+  Stream<ResultData> newUsername(String username) =>
+      Net().get("$set/new_username", {
+        "uid": Cache().userData.id,
         "username": username,
+        "auth": Cache().authCode ?? "",
       });
 
-  Stream<ResultData> newAvatar(int uid, String avatarUrl) =>
-      Net().get("$url/new_avatar", {
-        "uid": uid,
+  Stream<ResultData> newAvatar(String avatarUrl) =>
+      Net().get("$set/new_avatar", {
+        "uid": Cache().userData.id,
         "avatar": avatarUrl,
+        "auth": Cache().authCode ?? "",
       });
 
-  Stream<ResultData> newPassword(
-          int uid, String oldPassword, String newPassword) =>
-      Net().get("$url/new_password", {
-        "uid": uid,
-        "oldPassword": oldPassword,
+  Stream<ResultData> newPassword(String newPassword) =>
+      Net().get("$set/new_password", {
+        "uid": Cache().userData.id,
         "newPassword": newPassword,
+        "auth": Cache().authCode ?? "",
       });
 
-  Stream<ResultData> newSex(int uid, int sex) => Net().get("$url/new_sex", {
-        "uid": uid,
+  Stream<ResultData> newSex(int uid, int sex) => Net().get("$set/new_sex", {
+        "uid": Cache().userData.id,
         "sex": sex,
+        "auth": Cache().authCode ?? "",
       });
 }

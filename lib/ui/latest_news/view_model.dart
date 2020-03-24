@@ -11,6 +11,10 @@ class LatestNewsViewModel with ChangeNotifier {
   List<PostData> get data => Cache().latestNews;
   bool loading = false;
 
+  LatestNewsViewModel() {
+    refresh();
+  }
+
   Future<void> refresh() async {
     if (loading) return;
 
@@ -22,8 +26,8 @@ class LatestNewsViewModel with ChangeNotifier {
       notifyListeners();
     }).doOnData((res) {
       if (res.result == 0) {
-        Cache.update(
-            K.latestNews, (res.data as List).map((i) => PostData.fromJson(i)).toList());
+        Cache().updateLatestNews(
+            (res.data as List).map((i) => PostData.fromJson(i)).toList());
         notifyListeners();
       }
     }).listen(null);

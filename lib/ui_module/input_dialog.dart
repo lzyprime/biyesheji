@@ -6,12 +6,14 @@ class InputDialog extends StatefulWidget {
   final String initText;
   final bool emptyEnable;
   final int maxLength;
+  final bool obscureText;
 
   InputDialog({
     @required this.title,
     this.maxLength,
     this.initText = "",
     this.emptyEnable = false,
+    this.obscureText = false,
   });
 
   @override
@@ -35,6 +37,7 @@ class _InputDialog extends State<InputDialog> {
       content: TextField(
         controller: inputController,
         decoration: InputDecoration(errorText: _errorText),
+        obscureText: widget.obscureText,
         maxLength: widget.maxLength,
       ),
       actions: <Widget>[

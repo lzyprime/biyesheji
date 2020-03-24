@@ -1,54 +1,61 @@
-import 'package:client/ui_module/input_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:client/globals/cache.dart';
-import 'package:client/globals/localizations.dart';
-import 'package:client/ui_module/enter_dialog.dart';
 import 'package:client/datas/user_data.dart';
 import 'package:client/models/user_model.dart';
+import 'package:client/models/favorite_model.dart';
 
 class UserViewModel with ChangeNotifier {
-  final _model = UserModel();
+  static final Map<int, UserViewModel> _cache = {};
+  UserData userData;
 
-  UserData get userData => Cache().userData;
+  factory UserViewModel(UserData userData) =>
+      _cache[userData?.id ?? 0] ??= UserViewModel._(userData);
+
+  UserViewModel._(this.userData) {
+    if (uid != 0 && userData != null && userData.id != uid) getAttention();
+  }
+
+  final _model = UserModel();
+  final _favoriteModel = FavoriteModel();
+
+  int get uid => Cache().userData?.id ?? 0;
 
   Future<void> refresh() async {
     _model.getUserInfo(userData.id).listen((res) {
       if (res.result == 0) {
-        Cache().updateUserData(UserData.fromJson(res.data));
+        userData = UserData.fromJson(res.data);
+        if (userData.id == uid) Cache().updateUserData(userData);
         notifyListeners();
       }
     });
   }
 
-  setAvatar(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) =>
-          InputDialog(title: S.of(context).avatar, initText: userData.avatar),
-    ).then((v) {
-      if (v != null && v != userData.avatar)
-        _model.newAvatar(userData.id, v).listen((res) {
-          if (res.result == 0) {
-            userData.avatar = v;
-            Cache.update(K.userInfo, userData);
-            notifyListeners();
-          } else
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text(res.msg ?? "")));
-        });
+  bool attention = false;
+  int attentionLoading = 0; // 0 normal, 1 loading, 2 failed
+  getAttention() {
+    if (uid == 0 || uid == userData?.id) return;
+    _favoriteModel.attentionStatus(uid, userData?.id).doOnListen(() {
+      attentionLoading = 1;
+      notifyListeners();
+    }).listen((res) {
+      attentionLoading = res.result == 0 ? 0 : 2;
+      attention = res.data ?? false;
+      notifyListeners();
     });
   }
 
-  logout(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) => EnterDialog(S.of(context).logout)).then((v) {
-      if (v == true) {
-        Cache().clearUserData();
-        notifyListeners();
-      }
+  changeAttention() {
+    if (uid == 0 || uid == userData?.id) return;
+    _favoriteModel.changeAttention(uid, userData?.id).doOnListen(() {
+      attentionLoading = 1;
+      notifyListeners();
+    }).listen((res) {
+      attentionLoading = 0;
+      if (res.result == 0) attention = res.data;
+      notifyListeners();
     });
   }
 }

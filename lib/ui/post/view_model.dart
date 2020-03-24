@@ -1,3 +1,5 @@
+import 'package:client/models/post_model.dart';
+import 'package:client/ui_module/enter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
@@ -40,6 +42,18 @@ class PostViewModel with ChangeNotifier {
       favoriteLoading = 0;
       if (res.result == 0) favorite = res.data;
       notifyListeners();
+    });
+  }
+
+  removePost(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => EnterDialog(Icon(Icons.delete)),
+    ).then((res) {
+      if (res == true)
+        PostModel().removePost(postData.id).listen((res) {
+          if (res.result == 0) Navigator.pop(context);
+        });
     });
   }
 }

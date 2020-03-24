@@ -12,6 +12,7 @@ class UserData {
   int favoriteNum;
   int attentionNum;
   int followerNum;
+  int commentNum;
 
   String get sexStr {
     if (sex == EnumSex.male) return S.current.male;
@@ -29,6 +30,7 @@ class UserData {
     this.favoriteNum = 0,
     this.attentionNum = 0,
     this.followerNum = 0,
+    this.commentNum = 0,
   });
 
   UserData.fromJson(Map<String, dynamic> json)
@@ -36,11 +38,12 @@ class UserData {
         username = json["username"] ?? "",
         email = json["email"] ?? "",
         sex = EnumSex.values[json["sex"] ?? 0],
-        avatar = json["avatar"]??"",
-        postNum = json["post_num"] ?? 0,
-        favoriteNum = json["favorite_num"] ?? 0,
-        attentionNum = json["attention_num"] ?? 0,
-        followerNum = json["follower_num"] ?? 0;
+        avatar = json["avatar"] ?? "",
+        postNum = json["postNum"] ?? 0,
+        favoriteNum = json["favoriteNum"] ?? 0,
+        attentionNum = json["attentionNum"] ?? 0,
+        followerNum = json["followerNum"] ?? 0,
+        commentNum = json["commentNum"];
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -48,9 +51,10 @@ class UserData {
         "email": email,
         "sex": sex.index,
         "avatar": avatar,
-        "post_num": postNum,
-        "favorite_num": favoriteNum,
-        "attention_num": attentionNum,
-        "follower_num": followerNum
+        "postNum": postNum,
+        "favoriteNum": favoriteNum,
+        "attentionNum": attentionNum,
+        "followerNum": followerNum,
+        "commentNum": commentNum,
       };
 }

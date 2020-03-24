@@ -13,6 +13,7 @@ class PreviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text(_data.title)),
-        body: PostContentCard(_data.title, _data.content));
+        body: SingleChildScrollView(
+            child: PostContentCard(_data.title, _data.content)));
   }
 }

@@ -6,12 +6,13 @@ import 'package:client/globals/cache.dart';
 import 'package:client/globals/localizations.dart';
 import 'package:client/ui_module/enter_dialog.dart';
 import 'package:client/ui/latest_news/latest_news_widget.dart';
-import 'package:client/ui/user/view_model.dart';
 import 'package:client/ui/user/user_widget.dart';
 import 'package:client/globals/route.dart';
 import 'package:client/ui/latest_news/view_model.dart';
 
 class HomeWidget extends StatefulWidget {
+  final latestNewsViewModel = LatestNewsViewModel();
+
   @override
   createState() => _HomeWidgetState();
 }
@@ -23,14 +24,11 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LatestNewsViewModel()),
-        ChangeNotifierProvider(create: (_) => UserViewModel()),
-      ],
+    return ChangeNotifierProvider.value(
+      value: widget.latestNewsViewModel,
       child: Scaffold(
         body: PageView(
-          children: [LatestNewsWidget(), UserWidget()],
+          children: [LatestNewsWidget(), UserWidget(Cache().userData)],
           controller: _pageController,
           onPageChanged: (index) => setState(() {
             _currentIndex = index;
@@ -45,6 +43,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       child: IconButton(
                           icon: _items[i],
                           onPressed: () {
+
                             _pageController.jumpToPage(i);
                           },
                           color: _currentIndex == i
@@ -57,8 +56,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             onPressed: () {
               if (Cache().userData == null)
                 showDialog(
-                    context: context,
-                    builder: (_) => EnterDialog(S.of(context).login)).then((v) {
+                  context: context,
+                  builder: (_) => EnterDialog(Text(S.of(context).login)),
+                ).then((v) {
                   if (v == true) Navigator.of(context).pushNamed(R.login);
                 });
               else

@@ -19,6 +19,7 @@ class LatestNewsWidget extends StatelessWidget {
             child: ListView.builder(
                 itemBuilder: (_, i) => PostListCard(viewModel.data[i]),
                 itemCount: viewModel.data.length),
-            onRefresh: viewModel.refresh));
+            onRefresh: viewModel.refresh),
+    );
   }
 }

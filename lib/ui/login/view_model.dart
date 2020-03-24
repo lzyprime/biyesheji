@@ -42,9 +42,11 @@ class LoginViewModel with ChangeNotifier {
         errorText = res.msg;
         return;
       } else {
-        final userData = UserData.fromJson(res.data);
-        if (userData.id == 0) return;
-        Cache.update(K.userInfo, userData);
+        final userData = UserData.fromJson(res.data["user"]);
+        final String authCode = res.data["authCode"];
+        if (userData.id == 0 || authCode == null || authCode.isEmpty) return;
+        Cache().updateUserData(userData);
+        Cache().updateAuthCode(authCode);
         Navigator.of(context).pop();
       }
     }).listen(null);

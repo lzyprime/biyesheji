@@ -19,18 +19,12 @@ class EditPostViewModel with ChangeNotifier {
 
   editPost(BuildContext context) {
     _postModel
-        .editPost(
-      postData.id,
-      postData.title,
-      postData.content,
-      uid,
-    )
+        .editPost(postData.id, postData.title, postData.content)
         .doOnData((res) {
+          print(res.msg);
       if (res.result == 0) {
         final newPost = PostData.fromJson(res.data);
-        Cache.update(K.posts,[newPost]);
-        Navigator.of(context).pushReplacementNamed(R.post,
-            arguments: newPost);
+        Navigator.of(context).pushReplacementNamed(R.post, arguments: newPost);
       }
     }).listen(null);
   }
