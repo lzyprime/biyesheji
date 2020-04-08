@@ -9,8 +9,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DB {
     private val db by lazy {
         Database.connect(
-            "jdbc:sqlite:src/db/ktor_server.sqlite",
-            "org.sqlite.JDBC"
+            "jdbc:mariadb://127.0.0.1:3306/biyesheji",
+            "org.mariadb.jdbc.Driver",
+            "root",
+            "3821"
         )
     }
 
