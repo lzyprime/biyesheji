@@ -38,4 +38,5 @@ dependencies {
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
     compile "org.jetbrains.exposed:exposed:0.16.1"
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.6.0'
+    implementation 'org.xerial:sqlite-jdbc:3.30.1'
 }
